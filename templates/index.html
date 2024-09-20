@@ -53,7 +53,69 @@
                 </div>
             </div>
         </div>
-        
+
+                <!-- Filters -->
+        <div class="row mb-4">
+            <div class="col-md-2">
+                <label for="filterYear">Year</label>
+                <select class="form-control" id="filterYear">
+                    <option value="">All</option>
+                    <!-- Dynamically populate years -->
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="filterMonth">Month</label>
+                <select class="form-control" id="filterMonth">
+                    <option value="">All</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="filterMediaType">Media Type</label>
+                <select class="form-control" id="filterMediaType">
+                    <option value="">All</option>
+                    <option value="Video">Video</option>
+                    <option value="Audio">Audio</option>
+                    <option value="Image">Image</option>
+                    <!-- Add other media types as needed -->
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="filterStatus">Status</label>
+                <select class="form-control" id="filterStatus">
+                    <option value="">All</option>
+                    <option value="Real">Real</option>
+                    <option value="Fake">Fake</option>
+                </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button class="btn btn-primary mr-2" id="applyFilters">Apply Filters</button>
+                <button class="btn btn-secondary" id="resetFilters">Reset Filters</button>
+            </div>
+        </div>
+
+        <!-- Download Report -->
+        <div class="row mb-4">
+            <div class="col-md-12 text-right">
+                <div class="btn-group" role="group" aria-label="Report Download">
+                    <button type="button" class="btn btn-success" id="downloadCSV">Download CSV</button>
+                    <button type="button" class="btn btn-danger" id="downloadPDF">Download PDF</button>
+                </div>
+            </div>
+        </div>
+
+                
         <!-- Trend Chart -->
         <div class="row">
             <div class="col-md-8 mb-4">
