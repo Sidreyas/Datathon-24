@@ -1,0 +1,37 @@
+{
+    "overview": {
+      "total_media_processed": 1500,
+      "total_deepfakes_detected": 120,
+      "detection_accuracy": 98.5,
+      "false_positives": 5,
+      "false_negatives": 3
+    },
+    "recent_detections": [
+      {
+        "id": 1,
+        "media_type": "Video",
+        "timestamp": "2024-09-19 14:23",
+        "status": "Fake",
+        "confidence_score": 0.95,
+        "details": "Face swap detected."
+      },
+      {
+        "id": 2,
+        "media_type": "Audio",
+        "timestamp": "2024-09-19 13:47",
+        "status": "Real",
+        "confidence_score": 0.85,
+        "details": "No manipulation detected."
+      }
+      
+    ],
+    "trend_data": {
+      "dates": ["2024-09-15", "2024-09-16", "2024-09-17", "2024-09-18", "2024-09-19"],
+      "detections": [20, 25, 30, 35, 10]
+    },
+    "deepfake_types": {
+      "types": ["Face Swap", "Voice Synthesis", "Expression Manipulation", "Other"],
+      "counts": [50, 30, 25, 15]
+    }
+  }
+  
