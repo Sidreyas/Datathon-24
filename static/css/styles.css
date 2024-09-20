@@ -5,3 +5,25 @@ body {
 .card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+/* File: static/css/styles.css */
+
+body {
+    background-color: #f8f9fa;
+}
+
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#trendChart {
+    height: 400px; /* Increased height for better visibility */
+}
+
+#typeChart {
+    height: 300px; /* Adjust as needed */
+}
+
+/* Optional: Ensure tables are responsive */
+.table {
+    width: 100%;
+}

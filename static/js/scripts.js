@@ -1,5 +1,10 @@
 // File: static/js/scripts.js
 
+let currentPage = 1;
+const recordsPerPage = 20;
+let totalRecords = 0;
+
+
 $(document).ready(function() {
     // Initialize global variables for chart instances
     let trendChartInstance = null;
@@ -28,18 +33,20 @@ $(document).ready(function() {
         let month = $('#filterMonth').val();
         let media_type = $('#filterMediaType').val();
         let status = $('#filterStatus').val();
+        let medium = $('#filterMedium').val();
 
         // Fetch and update recent detections table
-        $.getJSON('/api/recent_detections_filtered', { year, month, media_type, status }, function(filteredData) {
+        $.getJSON('/api/recent_detections_filtered', { year, month, media_type, status, medium }, function(filteredData) {
             var tableBody = $('#detectionsTable tbody');
             tableBody.empty();  // Clear existing data
             if (filteredData.length === 0) {
-                tableBody.append('<tr><td colspan="6" class="text-center">No records found.</td></tr>');
+                tableBody.append('<tr><td colspan="7" class="text-center">No records found.</td></tr>');
             } else {
                 filteredData.forEach(function(detection) {
                     var row = '<tr>' +
                               `<td>${detection.id}</td>` +
                               `<td>${detection.media_type}</td>` +
+                              `<td>${detection.medium}</td>` +
                               `<td>${detection.timestamp}</td>` +
                               `<td>${detection.status}</td>` +
                               `<td>${(detection.confidence_score * 100).toFixed(2)}%</td>` +
@@ -54,7 +61,7 @@ $(document).ready(function() {
 
         // Update charts based on filters
         loadTrendChart(year, month);
-        loadTypeChart(year, month);
+        loadTypeChart(year, month, medium);
     }
 
     // Function to reset all filters
@@ -63,6 +70,7 @@ $(document).ready(function() {
         $('#filterMonth').val('');
         $('#filterMediaType').val('');
         $('#filterStatus').val('');
+        $('#filterMedium').val('');
         applyFilters();  // Reload dashboard with all data
     }
 
@@ -143,12 +151,13 @@ $(document).ready(function() {
     }
 
     // Function to load and render the Deepfake Types Pie Chart
-    function loadTypeChart(year = null, month = null) {
+    function loadTypeChart(year = null, month = null, medium = null) {
         let endpoint = '/api/deepfake_types_filtered'; // Assume you have this endpoint to get filtered types
         let params = {};
 
         if (year) params.year = year;
         if (month) params.month = month;
+        if (medium) params.medium = medium;
 
         $.getJSON(endpoint, params, function(data) {
             var ctx = document.getElementById('typeChart').getContext('2d');
@@ -167,14 +176,24 @@ $(document).ready(function() {
                             'rgba(255, 206, 86, 0.6)',
                             'rgba(75, 192, 192, 0.6)',
                             'rgba(153, 102, 255, 0.6)',
-                            'rgba(255, 159, 64, 0.6)'
+                            'rgba(255, 159, 64, 0.6)',
+                            'rgba(199, 199, 199, 0.6)',
+                            'rgba(83, 102, 255, 0.6)',
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)'
                         ],
                         borderColor: [
                             'rgba(54, 162, 235, 1)',
                             'rgba(255, 206, 86, 1)',
                             'rgba(75, 192, 192, 1)',
                             'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(199, 199, 199, 1)',
+                            'rgba(83, 102, 255, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
                         ],
                         borderWidth: 1
                     }]
@@ -189,7 +208,7 @@ $(document).ready(function() {
                         callbacks: {
                             label: function(tooltipItem, data) {
                                 let dataset = data.datasets[tooltipItem.datasetIndex];
-                                let total = dataset.data.reduce((prev, curr) => prev + curr);
+                                let total = dataset.data.reduce((prev, curr) => prev + curr, 0);
                                 let currentValue = dataset.data[tooltipItem.index];
                                 let percentage = ((currentValue / total) * 100).toFixed(2);
                                 return `${data.labels[tooltipItem.index]}: ${percentage}%`;
@@ -204,29 +223,60 @@ $(document).ready(function() {
     }
 
     // Function to populate the Recent Detections Table initially
-    function populateRecentDetections() {
-        $.getJSON('/api/recent_detections', function(data) {
-            var tableBody = $('#detectionsTable tbody');
-            tableBody.empty();  // Clear existing data
-            if (data.length === 0) {
-                tableBody.append('<tr><td colspan="6" class="text-center">No records found.</td></tr>');
-            } else {
-                data.forEach(function(detection) {
-                    var row = '<tr>' +
-                              `<td>${detection.id}</td>` +
-                              `<td>${detection.media_type}</td>` +
-                              `<td>${detection.timestamp}</td>` +
-                              `<td>${detection.status}</td>` +
-                              `<td>${(detection.confidence_score * 100).toFixed(2)}%</td>` +
-                              `<td>${detection.details}</td>` +
-                              '</tr>';
-                    tableBody.append(row);
-                });
-            }
-        }).fail(function() {
-            console.error("Failed to fetch recent detections.");
-        });
+function populateRecentDetections(page) {
+    $.getJSON(`/api/recent_detections`, function(data) {
+        totalRecords = data.length; // Assuming the API returns the total number of records
+        const tableBody = $('#detectionsTable tbody');
+        tableBody.empty();  // Clear existing data
+
+        if (data.length === 0) {
+            tableBody.append('<tr><td colspan="6" class="text-center">No records found.</td></tr>');
+        } else {
+            const start = (page - 1) * recordsPerPage;
+            const end = start + recordsPerPage;
+            const paginatedData = data.slice(start, end); 
+            paginatedData.forEach(function(detection) {
+                const row = '<tr>' +
+                    `<td>${detection.id}</td>` +
+                    `<td>${detection.media_type}</td>` +
+                    `<td>${detection.timestamp}</td>` +
+                    `<td>${detection.status}</td>` +
+                    `<td>${(detection.confidence_score * 100).toFixed(2)}%</td>` +
+                    `<td>${detection.details}</td>` +
+                    '</tr>';
+                tableBody.append(row);
+            });
+        }
+
+        updatePaginationInfo();
+    }).fail(function() {
+        console.error("Failed to fetch recent detections.");
+    });
+}
+
+function updatePaginationInfo() {
+    $('#paginationInfo').text(`Showing ${Math.min((currentPage - 1) * recordsPerPage + 1, totalRecords)} - ${Math.min(currentPage * recordsPerPage, totalRecords)} of ${totalRecords} records.`);
+    $('#prevBtn').prop('disabled', currentPage === 1);
+    $('#nextBtn').prop('disabled', currentPage * recordsPerPage >= totalRecords);
+}
+
+// Pagination button handlers
+$('#prevBtn').click(function() {
+    if (currentPage > 1) {
+        currentPage--;
+        populateRecentDetections(currentPage);
     }
+});
+
+$('#nextBtn').click(function() {
+    if (currentPage * recordsPerPage < totalRecords) {
+        currentPage++;
+        populateRecentDetections(currentPage);
+    }
+});
+
+// Initial load
+populateRecentDetections(currentPage);
 
     // Function to handle Report Downloads
     function handleReportDownloads() {
@@ -235,8 +285,9 @@ $(document).ready(function() {
             let month = $('#filterMonth').val();
             let media_type = $('#filterMediaType').val();
             let status = $('#filterStatus').val();
+            let medium = $('#filterMedium').val();
 
-            let query = $.param({ format: 'csv', year, month, media_type, status });
+            let query = $.param({ format: 'csv', year, month, media_type, status, medium });
             window.location.href = `/api/generate_report?${query}`;
         });
 
@@ -245,8 +296,9 @@ $(document).ready(function() {
             let month = $('#filterMonth').val();
             let media_type = $('#filterMediaType').val();
             let status = $('#filterStatus').val();
+            let medium = $('#filterMedium').val();
 
-            let query = $.param({ format: 'pdf', year, month, media_type, status });
+            let query = $.param({ format: 'pdf', year, month, media_type, status, medium });
             window.location.href = `/api/generate_report?${query}`;
         });
     }
@@ -261,16 +313,11 @@ $(document).ready(function() {
         handleReportDownloads();
     }
 
-    // Event Listeners for Filters
-    $('#applyFilters').click(function() {
+    // Event Listeners for Filters (Real-Time)
+    $('#filterYear, #filterMonth, #filterMediaType, #filterStatus, #filterMedium').on('change', function() {
         applyFilters();
-    });
-
-    $('#resetFilters').click(function() {
-        resetFilters();
     });
 
     // Initialize the dashboard on page load
     initializeDashboard();
 });
-

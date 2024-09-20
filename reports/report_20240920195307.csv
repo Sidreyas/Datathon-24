@@ -1,0 +1,8 @@
+id,media_type,timestamp,status,confidence_score,details
+67,Audio,2023-05-28 16:40,Fake,0.88,Voice synthesis detected.
+91,Audio,2023-05-25 19:11,Real,0.71,No manipulation detected.
+169,Audio,2023-05-17 03:48,Fake,0.96,Background alteration detected.
+364,Audio,2023-05-09 18:03,Real,0.77,No manipulation detected.
+370,Audio,2023-05-20 03:00,Real,0.7,No manipulation detected.
+413,Audio,2023-05-26 15:50,Fake,0.79,Face swap detected.
+510,Audio,2023-05-06 08:22,Real,0.66,No manipulation detected.

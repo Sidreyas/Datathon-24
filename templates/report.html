@@ -1,0 +1,9 @@
+from weasyprint import HTML
+
+def generate_pdf_report_html(filtered_data, filename):
+    # Render an HTML template with the data
+    html_content = render_template('report.html', data=filtered_data, overview=overview)
+    html = HTML(string=html_content)
+    pdf_path = os.path.join("reports", filename)
+    html.write_pdf(pdf_path)
+    return pdf_path

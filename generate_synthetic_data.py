@@ -22,6 +22,8 @@ DEEPFAKE_TYPES = [
     "Color Grading Inconsistency",
     "Echo Effect Manipulation"
 ]
+MEDIUMS = ["Instagram", "WhatsApp", "Twitter", "Facebook", "YouTube", "TikTok", "Snapchat", "Reddit"]
+
 DETAILS_MAPPING = {
     "Face Swap": "Face swap detected.",
     "Voice Synthesis": "Voice synthesis detected.",
@@ -51,7 +53,9 @@ def save_data(file_path, data):
     """Save updated data back to the JSON file."""
     with open(file_path, 'w') as f:
         json.dump(data, f, indent=4)
-
+        
+        
+# Inside generate_synthetic_data.py
 def generate_detections(num_entries, start_date, end_date):
     """Generate synthetic detection entries."""
     detections = []
@@ -62,6 +66,7 @@ def generate_detections(num_entries, start_date, end_date):
     for _ in range(num_entries):
         media_type = random.choice(MEDIA_TYPES)
         status = random.choice(STATUSES)
+        medium = random.choice(MEDIUMS)
         if status == "Fake":
             deepfake_type = random.choice(DEEPFAKE_TYPES)
             details = DETAILS_MAPPING.get(deepfake_type, "Deepfake manipulation detected.")
@@ -78,7 +83,8 @@ def generate_detections(num_entries, start_date, end_date):
             "timestamp": timestamp,
             "status": status,
             "confidence_score": confidence_score,
-            "details": details
+            "details": details,
+            "medium": medium
         }
         detections.append(detection)
         current_id += 1
@@ -136,6 +142,21 @@ def update_deepfake_types(data):
         "counts": counts
     }
 
+def update_medium_data(data):
+    """Update the medium distribution based on recent detections."""
+    medium_counts = {}
+    for d in data["recent_detections"]:
+        if d["status"] == "Fake":
+            medium = d.get("medium", "Other")
+            medium_counts[medium] = medium_counts.get(medium, 0) + 1
+    # Convert to lists
+    mediums = list(medium_counts.keys())
+    counts = list(medium_counts.values())
+    data["medium_distribution"] = {
+        "mediums": mediums,
+        "counts": counts
+    }
+
 if __name__ == "__main__":
     # Load existing data
     data = load_existing_data(OUTPUT_FILE)
@@ -154,6 +175,9 @@ if __name__ == "__main__":
     
     # Update deepfake types
     update_deepfake_types(data)
+    
+    # Update medium distribution
+    update_medium_data(data)
     
     # Save the updated data back to the JSON file
     save_data(OUTPUT_FILE, data)

@@ -60,7 +60,6 @@
                 <label for="filterYear">Year</label>
                 <select class="form-control" id="filterYear">
                     <option value="">All</option>
-                    <!-- Dynamically populate years -->
                 </select>
             </div>
             <div class="col-md-2">
@@ -82,6 +81,17 @@
                 </select>
             </div>
             <div class="col-md-2">
+                <label for="filterMedium">Medium</label>
+                <select class="form-control" id="filterMedium">
+                    <option value="">All</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="WhatsApp">WhatsApp</option>
+                    <option value="Twitter">Twitter</option>
+                    <option value="Facebook">Facebook</option>
+                </select>
+            </div>
+        
+            <div class="col-md-2">
                 <label for="filterMediaType">Media Type</label>
                 <select class="form-control" id="filterMediaType">
                     <option value="">All</option>
@@ -99,10 +109,6 @@
                     <option value="Fake">Fake</option>
                 </select>
             </div>
-            <div class="col-md-4 d-flex align-items-end">
-                <button class="btn btn-primary mr-2" id="applyFilters">Apply Filters</button>
-                <button class="btn btn-secondary" id="resetFilters">Reset Filters</button>
-            </div>
         </div>
 
         <!-- Download Report -->
@@ -119,7 +125,7 @@
         <!-- Trend Chart -->
         <div class="row">
             <div class="col-md-8 mb-4">
-                <div class="card">
+                <div class="card" style="height: 390px;">
                     <div class="card-header">
                         Detection Trends Over Time
                     </div>
@@ -131,7 +137,7 @@
             
             <!-- Deepfake Types Pie Chart -->
             <div class="col-md-4 mb-4">
-                <div class="card">
+                <div class="card" style="height: 390px;">
                     <div class="card-header">
                         Deepfake Types Distribution
                     </div>
@@ -150,6 +156,7 @@
                         Recent Detections
                     </div>
                     <div class="card-body">
+                        <div id="paginationInfo" class="mb-3"></div>
                         <table class="table table-striped" id="detectionsTable">
                             <thead>
                                 <tr>
@@ -165,6 +172,10 @@
                                 <!-- Data will be populated here via JavaScript -->
                             </tbody>
                         </table>
+                        <div>
+                            <button id="prevBtn" class="btn btn-primary" disabled>Previous</button>
+                            <button id="nextBtn" class="btn btn-primary">Next</button>
+                        </div>
                     </div>
                 </div>
             </div>
