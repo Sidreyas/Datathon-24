@@ -1,4 +1,10 @@
 import streamlit as st
+import subprocess
+
+def run_fastapi():
+    command = ["uvicorn", "Dashboardfaskapp:app", "--reload"]
+    subprocess.Popen(command)
+run_fastapi()
 
 fastapi_url = "http://localhost:8000"  
 
