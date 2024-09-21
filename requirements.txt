@@ -4,4 +4,11 @@ jinja2
 python-multipart
 pandas
 reportlab
-
+grad-cam
+fpdf
+facenet-pytorch
+Google-Images-Search
+opencv-python
+numpy
+matplotlib
+pillow

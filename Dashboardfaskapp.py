@@ -312,12 +312,12 @@ async def get_recent_detections_filtered(
     month: int = Query(None, ge=1, le=12, description="Filter by month (1-12)"),
     media_type: str = Query(
         None, 
-        regex="^(Video|Audio|Image|Other)$", 
+        pattern="^(Video|Audio|Image|Other)$", 
         description="Filter by media type (Video, Audio, Image, Other)"
     ),
     status: str = Query(
         None, 
-        regex="^(Real|Fake)$", 
+        pattern="^(Real|Fake)$", 
         description="Filter by status (Real or Fake)"
     )
 ):
@@ -363,7 +363,7 @@ async def get_deepfake_types_filtered(
     month: int = Query(None, ge=1, le=12, description="Filter by month (1-12)"),
     medium: str = Query(
         None, 
-        regex="^(Instagram|WhatsApp|Twitter|Facebook|Other)$", 
+        pattern="^(Instagram|WhatsApp|Twitter|Facebook|Other)$", 
         description="Filter by medium (Instagram, WhatsApp, Twitter, Facebook, Other)"
     )
 ):
@@ -389,22 +389,22 @@ async def get_deepfake_types_filtered(
     
 @app.get("/api/generate_report")
 async def generate_report(
-    format: str = Query("csv", regex="^(csv|pdf)$", description="Format of the report: csv or pdf"),
+    format: str = Query("csv", pattern="^(csv|pdf)$", description="Format of the report: csv or pdf"),
     year: int = Query(None, ge=2000, le=2100, description="Filter by year (e.g., 2024)"),
     month: int = Query(None, ge=1, le=12, description="Filter by month (1-12)"),
     media_type: str = Query(
         None, 
-        regex="^(Video|Audio|Image|Other)$", 
+        pattern="^(Video|Audio|Image|Other)$", 
         description="Filter by media type (Video, Audio, Image, Other)"
     ),
     status: str = Query(
         None, 
-        regex="^(Real|Fake)$", 
+        pattern="^(Real|Fake)$", 
         description="Filter by status (Real or Fake)"
     ),
     medium: str = Query(
         None, 
-        regex="^(Instagram|WhatsApp|Twitter|Facebook|Other)$", 
+        pattern="^(Instagram|WhatsApp|Twitter|Facebook|Other)$", 
         description="Filter by medium (Instagram, WhatsApp, Twitter, Facebook, Other)"
     )
 ):
