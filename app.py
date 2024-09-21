@@ -439,3 +439,5 @@ async def get_medium_distribution(
     types = list(medium_counts.keys())
     counts = list(medium_counts.values())
     return {"types": types, "counts": counts}
+
+print('checking')
