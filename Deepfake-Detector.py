@@ -14,6 +14,8 @@ from pytorch_grad_cam.utils.image import show_cam_on_image
 import torch.nn.functional as F
 from datetime import datetime
 
+st.set_page_config(layout="wide")  
+
 # Model setup
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 mtcnn = MTCNN(select_largest=False, post_process=False, device=device).eval()
